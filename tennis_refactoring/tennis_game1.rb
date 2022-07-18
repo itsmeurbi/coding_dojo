@@ -27,32 +27,40 @@ class TennisGame1
   end
 
   def score
-    result = ''
-    temp_score = 0
-    if (@p1_points == @p2_points)
-      result = EQUAL_POINTS_WORDING.fetch(@p1_points, 'Deuce')
-    elsif (@p1_points >= 4 or @p2_points >= 4)
-      minus_result = @p1_points - @p2_points
-      if (minus_result == 1)
-        result = 'Advantage player1'
-      elsif (minus_result ==- 1)
-        result = 'Advantage player2'
-      elsif (minus_result >= 2)
-        result = 'Win for player1'
-      else
-        result = 'Win for player2'
-      end
+    if players_have_same_score?
+      EQUAL_POINTS_WORDING.fetch(@p1_points, 'Deuce')
+    elsif any_player_with_advantage?
+      potential_winner_wording
     else
-      (1...3).each do |i|
-        if (i == 1)
-          temp_score = @p1_points
-        else
-          result += '-'
-          temp_score = @p2_points
-        end
-        result += PLAYER_POINTS_WORDING[temp_score]
-      end
+      "#{player_points_wording(@p1_points)}-#{player_points_wording(@p2_points)}"
     end
-    result
+  end
+
+  private
+
+  def players_have_same_score?
+    @p1_points == @p2_points
+  end
+
+  def any_player_with_advantage?
+    @p1_points >= 4 || @p2_points >= 4
+  end
+
+  def potential_winner_wording
+    minus_result = @p1_points - @p2_points
+    if (minus_result == 1)
+      'Advantage player1'
+    elsif (minus_result == -1)
+      'Advantage player2'
+    elsif (minus_result >= 2)
+      'Win for player1'
+    else
+      'Win for player2'
+    end
+  end
+
+  def player_points_wording(points)
+    PLAYER_POINTS_WORDING[points]
   end
 end
+
