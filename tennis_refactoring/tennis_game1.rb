@@ -12,10 +12,11 @@ class TennisGame1
     @player2 = Player.new(name: player2_name)
   end
 
+  # potential bug if players have the same name
   def won_point(player_name)
     if player_name == player1.name
       player1.add_point!
-    else
+    elsif player_name == player2.name
       player2.add_point!
     end
   end
