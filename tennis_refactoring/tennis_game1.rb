@@ -12,20 +12,19 @@ class TennisGame1
     @player2 = Player.new(name: player2_name)
   end
 
-  # potential bug if players have the same name
+  # potential bug if players have same name
   def won_point(player_name)
-    if player_name == player1.name
-      player1.add_point!
-    elsif player_name == player2.name
-      player2.add_point!
-    end
+    player = find_player(player_name)
+    player.add_point!
   end
 
   def score
-    if players_have_same_score?
+    if winner.present?
+      "Win for #{winner.name}"
+    elsif player_with_advantage.present?
+      "Advantage #{player_with_advantage.name}"
+    elsif players_have_same_score?
       EQUAL_POINTS_WORDING.fetch(player1.points, 'Deuce')
-    elsif any_player_with_advantage?
-      potential_winner_wording
     else
       "#{player1.score}-#{player2.score}"
     end
@@ -39,20 +38,29 @@ class TennisGame1
     player1.points == player2.points
   end
 
-  def any_player_with_advantage?
+  def late_game?
     player1.points >= 4 || player2.points >= 4
   end
 
-  def potential_winner_wording
-    minus_result = player1.points - player2.points
-    if (minus_result == 1)
-      "Advantage #{player1.name}"
-    elsif (minus_result == -1)
-      "Advantage #{player2.name}"
-    elsif (minus_result >= 2)
-      "Win for #{player1.name}"
-    else
-      "Win for #{player2.name}"
-    end
+  def player_with_advantage
+    return nil unless late_game?
+
+    return player1 if (player1.points - player2.points) == 1
+
+    return player2 if (player2.points - player1.points) == 1
+  end
+
+  def winner
+    return nil unless late_game?
+
+    return player1 if (player1.points - player2.points) >= 2
+
+    return player2 if (player2.points - player1.points) >= 2
+  end
+
+  def find_player(name)
+    return player1 if name == player1.name
+
+    player2
   end
 end
