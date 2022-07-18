@@ -1,7 +1,7 @@
 require_relative 'player'
 
 class TennisGame1
-  EQUAL_POINTS_WORDING = {
+  TIE_WORDING = {
     0 => 'Love-All',
     1 => 'Fifteen-All',
     2 => 'Thirty-All',
@@ -24,7 +24,7 @@ class TennisGame1
     elsif player_with_advantage.present?
       "Advantage #{player_with_advantage.name}"
     elsif players_have_same_score?
-      EQUAL_POINTS_WORDING.fetch(player1.points, 'Deuce')
+      TIE_WORDING.fetch(player1.points, 'Deuce')
     else
       "#{player1.score}-#{player2.score}"
     end
