@@ -1,10 +1,6 @@
+require_relative 'player'
+
 class TennisGame1
-  PLAYER_POINTS_WORDING = {
-    0 => 'Love',
-    1 => 'Fifteen',
-    2 => 'Thirty',
-    3 => 'Forty',
-  }.freeze
   EQUAL_POINTS_WORDING = {
     0 => 'Love-All',
     1 => 'Fifteen-All',
@@ -12,55 +8,50 @@ class TennisGame1
   }.freeze
 
   def initialize(player1_name, player2_name)
-    @player1_name = player1_name
-    @player2_name = player2_name
-    @p1_points = 0
-    @p2_points = 0
+    @player1 = Player.new(name: player1_name)
+    @player2 = Player.new(name: player2_name)
   end
 
   def won_point(player_name)
-    if player_name == 'player1'
-      @p1_points += 1
+    if player_name == player1.name
+      player1.add_point!
     else
-      @p2_points += 1
+      player2.add_point!
     end
   end
 
   def score
     if players_have_same_score?
-      EQUAL_POINTS_WORDING.fetch(@p1_points, 'Deuce')
+      EQUAL_POINTS_WORDING.fetch(player1.points, 'Deuce')
     elsif any_player_with_advantage?
       potential_winner_wording
     else
-      "#{player_points_wording(@p1_points)}-#{player_points_wording(@p2_points)}"
+      "#{player1.score}-#{player2.score}"
     end
   end
 
   private
 
+  attr_reader :player1, :player2
+
   def players_have_same_score?
-    @p1_points == @p2_points
+    player1.points == player2.points
   end
 
   def any_player_with_advantage?
-    @p1_points >= 4 || @p2_points >= 4
+    player1.points >= 4 || player2.points >= 4
   end
 
   def potential_winner_wording
-    minus_result = @p1_points - @p2_points
+    minus_result = player1.points - player2.points
     if (minus_result == 1)
-      'Advantage player1'
+      "Advantage #{player1.name}"
     elsif (minus_result == -1)
-      'Advantage player2'
+      "Advantage #{player2.name}"
     elsif (minus_result >= 2)
-      'Win for player1'
+      "Win for #{player1.name}"
     else
-      'Win for player2'
+      "Win for #{player2.name}"
     end
   end
-
-  def player_points_wording(points)
-    PLAYER_POINTS_WORDING[points]
-  end
 end
-
