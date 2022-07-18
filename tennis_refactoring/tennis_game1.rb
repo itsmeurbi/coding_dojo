@@ -1,4 +1,16 @@
 class TennisGame1
+  PLAYER_POINTS_WORDING = {
+    0 => 'Love',
+    1 => 'Fifteen',
+    2 => 'Thirty',
+    3 => 'Forty',
+  }.freeze
+  EQUAL_POINTS_WORDING = {
+    0 => 'Love-All',
+    1 => 'Fifteen-All',
+    2 => 'Thirty-All',
+  }.freeze
+
   def initialize(player1_name, player2_name)
     @player1_name = player1_name
     @player2_name = player2_name
@@ -18,11 +30,7 @@ class TennisGame1
     result = ''
     temp_score = 0
     if (@p1_points == @p2_points)
-      result = {
-          0 => 'Love-All',
-          1 => 'Fifteen-All',
-          2 => 'Thirty-All',
-      }.fetch(@p1_points, 'Deuce')
+      result = EQUAL_POINTS_WORDING.fetch(@p1_points, 'Deuce')
     elsif (@p1_points >= 4 or @p2_points >= 4)
       minus_result = @p1_points - @p2_points
       if (minus_result == 1)
@@ -42,12 +50,7 @@ class TennisGame1
           result += '-'
           temp_score = @p2_points
         end
-        result += {
-            0 => 'Love',
-            1 => 'Fifteen',
-            2 => 'Thirty',
-            3 => 'Forty',
-        }[temp_score]
+        result += PLAYER_POINTS_WORDING[temp_score]
       end
     end
     result
