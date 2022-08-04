@@ -14,4 +14,16 @@ class WordSpinnerTest < Minitest::Test
 
     assert_equal 'gninnips', response
   end
+
+  def test_it_works_with_empty_space_separated_word1
+    response = word_spinner('Hey fellow michelados')
+
+    assert_equal 'Hey wollef sodalehcim', response
+  end
+
+  def test_it_works_with_empty_space_separated_word2
+    response = word_spinner('This is another test')
+
+    assert_equal 'This is rehtona test', response
+  end
 end
