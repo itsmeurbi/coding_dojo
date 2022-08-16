@@ -1,10 +1,10 @@
-def extract_ids(structure, ids = [])
-  return ids unless structure[:id].present?
+# o2
+def extract_ids(data)
+  id = data[:id]
+  return [] unless id.present?
 
-  ids << structure[:id]
-  items = structure[:items] || []
-  items.each do |struc|
-    extract_ids(struc, ids)
+  items = data[:items] || []
+  items.reduce([id]) do |ids, item|
+    ids += extract_ids(item)
   end
-  ids
 end
